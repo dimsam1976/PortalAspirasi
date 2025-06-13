@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="Portal Aspirasi Siswa SMK PGRI 1 Tangerang - Program Kerja Komisi B MPK">
+  <meta name="theme-color" content="#dc2626">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Portal Aspirasi">
+  <title>Portal Aspirasi Siswa/i</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #64748b;
+      --success: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Smooth scrolling dan touch optimizations */
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    /* Better tap targets */
+    a, button, input, select, textarea {
+      -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+    }
+
+    /* Focus indicators for accessibility */
+    *:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Remove focus outline for mouse users */
+    *:focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 50%, #7f1d1d 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .header {
+      margin-bottom: 3rem;
+      color: white;
+    }
+
+    .logo-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .logo-left, .logo-right {
+      flex: 0 0 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-center {
+      flex: 1;
+      text-align: center;
+    }
+
+    .header-center h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header-center p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .logo-placeholder {
+      width: 120px;
+      height: 120px;
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+
+    .logo-placeholder:hover {
+      border-color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-placeholder i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+    }
+
+    .logo-placeholder span {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      text-align: center;
+    }
+
+    .logo-img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-btn {
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      color: white;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .form-section, .info-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-section h2, .info-section h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .info-card {
+      background: var(--light);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .info-card h3 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .stat-card .label {
+      color: var(--secondary);
+      margin-top: 0.5rem;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      opacity: 0.8;
+      margin-top: 3rem;
+    }
+
+    .hidden-admin-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .hidden-admin-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 12px;
+      overflow: hidden;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    /* Extra Small Devices (Phones, 320px and up) */
+    @media (max-width: 575px) {
+      .container {
+        padding: 0.75rem;
+      }
+
+      .header-center h1 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+      }
+
+      .header-center p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+
+      .logo-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo-left, .logo-right {
+        flex: none;
+      }
+
+      .header-center {
+        order: -1;
+      }
+
+      .logo-img, .logo-placeholder {
+        width: 80px;
+        height: 80px;
+      }
+
+      .logo-placeholder i {
+        font-size: 1.5rem;
+      }
+
+      .logo-placeholder span {
+        font-size: 0.7rem;
+      }
+
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .form-section, .info-section {
+        padding: 1rem;
+      }
+
+      .form-section h2, .info-section h2 {
+        font-size: 1.2rem;
+      }
+
+      .form-control {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .stat-card {
+        padding: 1rem;
+      }
+
+      .stat-card .number {
+        font-size: 1.5rem;
+      }
+
+      .modal-content {
+        width: 95%;
+        margin: 1rem;
+      }
+
+      .modal-body {
+        padding: 1rem;
+      }
+
+      .hidden-admin-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+        bottom: 15px;
+        right: 15px;
+      }
+    }
+
+    /* Small Devices (Landscape Phones, 576px and up) */
+    @media (min-width: 576px) and (max-width: 767px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .header-center h1 {
+        font-size: 1.8rem;
+      }
+
+      .logo-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+      }
+
+      .logo-left, .logo-right {
+        flex: none;
+      }
+
+      .header-center {
+        order: -1;
+      }
+
+      .logo-img, .logo-placeholder {
+        width: 100px;
+        height: 100px;
+      }
+
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Medium Devices (Tablets, 768px and up) */
+    @media (min-width: 768px) and (max-width: 991px) {
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .logo-section {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .header-center h1 {
+        font-size: 2.2rem;
+      }
+    }
+
+    /* Large Devices (Desktops, 992px and up) */
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .main-content {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Extra Large Devices (Large Desktops, 1200px and up) */
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1400px;
+      }
+
+      .main-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+      }
+
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .header-center h1 {
+        font-size: 3rem;
+      }
+
+      .header-center p {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Landscape Orientation for Mobile */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .header {
+        margin-bottom: 1.5rem;
+      }
+
+      .logo-section {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .header-center {
+        order: 0;
+      }
+
+      .header-center h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.3rem;
+      }
+
+      .header-center p {
+        font-size: 0.8rem;
+      }
+
+      .logo-img, .logo-placeholder {
+        width: 60px;
+        height: 60px;
+      }
+
+      .main-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .form-section, .info-section {
+        padding: 1rem;
+      }
+
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+      }
+
+      .stat-card {
+        padding: 0.75rem;
+      }
+
+      .stat-card .number {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Touch Device Optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .btn {
+        min-height: 44px;
+        touch-action: manipulation;
+      }
+
+      .form-control {
+        min-height: 44px;
+      }
+
+      .hidden-admin-btn {
+        min-width: 48px;
+        min-height: 48px;
+      }
+
+      .logo-btn {
+        min-height: 44px;
+        padding: 0.75rem 1rem;
+      }
+    }
+
+    /* High DPI Displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .logo-img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      .hidden-admin-btn {
+        display: none;
+      }
+
+      .modal {
+        display: none;
+      }
+
+      body {
+        background: white;
+        color: black;
+      }
+
+      .header {
+        color: black;
+      }
+
+      .form-section, .info-section, .stat-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-section">
+        <div class="logo-left">
+          <img src="logo-sekolah.png" class="logo-img" alt="Logo Sekolah" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="logo-placeholder" style="display: none;">
+            <i class="fas fa-school"></i>
+            <span>Logo Sekolah</span>
+          </div>
+        </div>
+
+        <div class="header-center">
+          <h1><i class="fas fa-bullhorn"></i> Portal Aspirasi Siswa</h1>
+          <p>Suarakan pendapat dan saran Anda untuk kemajuan sekolah kita SMK PGRI 1 TANGERANG</p>
+          <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+            <p><i class="fas fa-users"></i> Program Kerja Komisi B MPK - Aspirasi Siswa</p>
+            <p><i class="fas fa-code"></i> Dikembangkan oleh Komisi B MPK</p>
+          </div>
+        </div>
+
+        <div class="logo-right">
+          <img src="logo-mpk.png" class="logo-img" alt="Logo MPK" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="logo-placeholder" style="display: none;">
+            <i class="fas fa-users-cog"></i>
+            <span>Logo MPK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <!-- Form Aspirasi -->
+      <div class="form-section">
+        <h2><i class="fas fa-edit"></i> Sampaikan Aspirasi</h2>
+        <form id="aspirationForm">
+          <div class="form-group">
+            <label for="name">Nama Lengkap</label>
+            <input type="text" id="name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="class">Kelas dan Jurusan</label>
+            <input type="text" id="class" class="form-control" placeholder="Contoh: XI DKV 2" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email (Wajib untuk respon)</label>
+            <input type="email" id="email" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Kategori Aspirasi</label>
+            <select id="category" class="form-control" required>
+              <option value="">Pilih Kategori</option>
+              <option value="fasilitas">Fasilitas Sekolah</option>
+              <option value="akademik">Akademik</option>
+              <option value="ekstrakurikuler">Ekstrakurikuler</option>
+              <option value="kantin">Kantin</option>
+              <option value="kebersihan">Kebersihan</option>
+              <option value="keamanan">Keamanan</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="aspiration">Aspirasi/Saran Anda</label>
+            <textarea id="aspiration" class="form-control" placeholder="Jelaskan aspirasi atau saran Anda secara detail..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Kirim Aspirasi
+          </button>
+        </form>
+      </div>
+
+      <!-- Informasi -->
+      <div class="info-section">
+        <h2><i class="fas fa-info-circle"></i> Informasi</h2>
+
+        <div class="info-card">
+          <h3>Cara Menggunakan</h3>
+          <p>Isi formulir dengan lengkap dan jelas. Aspirasi Anda akan ditinjau oleh pengurus MPK/OSIS dan akan mendapat tindak lanjut sesuai dengan kemungkinan implementasinya.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Jenis Aspirasi</h3>
+          <p>Kami menerima berbagai jenis aspirasi mulai dari program akademik, kegiatan ekstrakurikuler, hingga masalah kebersihan dan keamanan sekolah.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Waktu Respon</h3>
+          <p>Tim kami akan merespon aspirasi Anda dalam waktu maksimal 7 hari kerja. Untuk aspirasi yang memerlukan koordinasi lebih lanjut dengan pihak sekolah, akan ada pemberitahuan tambahan melalui email yang anda cantumkan.</p>
+        </div>
+
+        <div class="info-card">
+          <h3>Tentang Proker Ini</h3>
+          <p>Portal Aspirasi Siswa merupakan program kerja unggulan dari <strong>Komisi B MPK</strong> yang bertujuan menjembatani komunikasi antara siswa dan pihak sekolah untuk menciptakan lingkungan belajar yang lebih baik.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistik -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="number" id="totalAspirations">0</div>
+        <div class="label">Total Aspirasi</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="processedAspirations">0</div>
+        <div class="label">Telah Diproses</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="pendingAspirations">0</div>
+        <div class="label">Menunggu</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 Portal Aspirasi Siswa - Komisi B MPK</p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+        <i class="fas fa-heart" style="color: #ff6b6b;"></i> 
+        Dibuat dengan dedikasi oleh Komisi B MPK sebagai bagian dari Program Kerja Aspirasi Siswa
+      </p>
+      <p style="margin-top: 0.3rem; font-size: 0.8rem;">
+        "Suara Anda, Masa Depan Kita Bersama"
+      </p>
+    </div>
+  </div>
+
+  <!-- Tombol Admin Tersembunyi -->
+  <button class="hidden-admin-btn" id="adminAccessBtn" title="Admin Access">
+    <i class="fas fa-cog"></i>
+  </button>
+
+  <!-- Modal Admin -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-shield-alt"></i> !!Akses!!</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="adminForm">
+          <div class="form-group">
+            <label for="adminPassword">Akses</label>
+            <input type="password" id="adminPassword" class="form-control" placeholder="kode akses" required>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-sign-in-alt"></i> Masuk
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Sukses -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-check-circle"></i> Berhasil!</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success">
+          <p>Aspirasi Anda telah berhasil dikirim! Terima kasih atas partisipasi Anda dalam memajukan sekolah.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Password admin
+    const ADMIN_PASSWORD = 'KomisiB_MPK2025_AspirasiSiswa_SecureAccess_AdminPanel_PortalSiswa_SMKPgri1Tangerang_WebsiteAspirasi_ProkerKomisiB_2025';
+
+    // Data aspirasi dengan cloud sync
+    let aspirations = JSON.parse(localStorage.getItem('aspirations') || '[]');
+    
+    // Simple cloud sync menggunakan GitHub Gist (gratis)
+    const GIST_ID = 'YOUR_GIST_ID'; // Ganti dengan ID Gist Anda
+    const GITHUB_TOKEN = 'YOUR_TOKEN'; // Ganti dengan Personal Access Token
+    
+    async function syncToCloud() {
+      try {
+        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            files: {
+              'aspirasi-data.json': {
+                content: JSON.stringify(aspirations, null, 2)
+              }
+            }
+          })
+        });
+        
+        if (response.ok) {
+          console.log('Data berhasil disinkron ke cloud');
+        }
+      } catch (error) {
+        console.error('Gagal sinkron ke cloud:', error);
+      }
+    }
+    
+    async function loadFromCloud() {
+      try {
+        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+        const gist = await response.json();
+        const cloudData = JSON.parse(gist.files['aspirasi-data.json'].content);
+        
+        // Merge data cloud dengan data lokal
+        if (cloudData.length > aspirations.length) {
+          aspirations = cloudData;
+          localStorage.setItem('aspirations', JSON.stringify(aspirations));
+          updateStats();
+        }
+      } catch (error) {
+        console.error('Gagal load dari cloud:', error);
+      }
+    }
+
+    // Inisialisasi
+    document.addEventListener('DOMContentLoaded', function() {
+      updateStats();
+      setupEventListeners();
+    });
+
+    function setupEventListeners() {
+      // Form aspirasi
+      document.getElementById('aspirationForm').addEventListener('submit', handleAspirationSubmit);
+
+      // Admin access
+      document.getElementById('adminAccessBtn').addEventListener('click', function() {
+        document.getElementById('adminModal').style.display = 'flex';
+      });
+
+      // Admin form
+      document.getElementById('adminForm').addEventListener('submit', handleAdminLogin);
+
+      // Close modal
+      document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.closest('.modal').style.display = 'none';
+        });
+      });
+
+      // Close modal ketika klik di luar
+      window.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+          e.target.style.display = 'none';
+        }
+      });
+    }
+
+    function handleAspirationSubmit(e) {
+      e.preventDefault();
+
+      const formData = {
+        id: Date.now(),
+        name: document.getElementById('name').value,
+        class: document.getElementById('class').value,
+        email: document.getElementById('email').value,
+        category: document.getElementById('category').value,
+        aspiration: document.getElementById('aspiration').value,
+        date: new Date().toISOString().split('T')[0],
+        status: 'pending'
+      };
+
+      // Simpan ke localStorage
+      aspirations.push(formData);
+      localStorage.setItem('aspirations', JSON.stringify(aspirations));
+
+      // Reset form
+      document.getElementById('aspirationForm').reset();
+
+      // Update statistik
+      updateStats();
+
+      // Tampilkan modal sukses
+      document.getElementById('successModal').style.display = 'flex';
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+
+      const password = document.getElementById('adminPassword').value;
+
+      if (password === ADMIN_PASSWORD) {
+        // Redirect ke halaman admin
+        window.open('admin.html', '_blank');
+        document.getElementById('adminModal').style.display = 'none';
+        document.getElementById('adminPassword').value = '';
+      } else {
+        alert('Password salah! Silakan coba lagi.');
+        document.getElementById('adminPassword').value = '';
+      }
+    }
+
+    function updateStats() {
+      const total = aspirations.length;
+      const processed = aspirations.filter(a => a.status === 'processed').length;
+      const pending = aspirations.filter(a => a.status === 'pending').length;
+
+      document.getElementById('totalAspirations').textContent = total;
+      document.getElementById('processedAspirations').textContent = processed;
+      document.getElementById('pendingAspirations').textContent = pending;
+    }
+
+    // Auto update stats setiap 3 detik untuk real-time update
+    setInterval(updateStats, 3000);
+
+    // Update stats ketika window mendapat focus (user kembali ke tab)
+    window.addEventListener('focus', updateStats);
+
+    // Setup saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+      updateStats();
+      setupEventListeners();
+    });
+  </script>
+</body>
+</html>

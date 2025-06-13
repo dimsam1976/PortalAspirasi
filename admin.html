@@ -1,0 +1,1276 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Portal Aspirasi Siswa</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #64748b;
+      --success: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: #333;
+    }
+
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--dark);
+      color: white;
+      padding: 1rem 0;
+    }
+
+    .sidebar-header {
+      padding: 0 1rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-header h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-menu a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1rem;
+      transition: all 0.3s;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      border-left: 3px solid var(--primary);
+    }
+
+    .sidebar-menu i {
+      width: 20px;
+      margin-right: 0.5rem;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 1rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    /* Dashboard Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--dark);
+    }
+
+    .card.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .card.warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .card.danger {
+      border-left: 4px solid var(--danger);
+    }
+
+    .card.primary {
+      border-left: 4px solid var(--primary);
+    }
+
+    /* Charts Section */
+    .charts-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-container {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .chart-container h3 {
+      color: var(--dark);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 300px;
+    }
+
+    /* Tables */
+    .table-container {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .filter-controls select {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background: var(--light);
+      font-weight: 500;
+      color: #555;
+    }
+
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .badge.success {
+      background: #d1fae5;
+      color: var(--success);
+    }
+
+    .badge.warning {
+      background: #fef3c7;
+      color: var(--warning);
+    }
+
+    .badge.primary {
+      background: #dbeafe;
+      color: var(--primary);
+    }
+
+    .action-btn {
+      padding: 0.3rem 0.6rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-right: 0.3rem;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 8px;
+      overflow: hidden;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .detail-item {
+      margin-bottom: 1rem;
+    }
+
+    .detail-item label {
+      font-weight: bold;
+      color: var(--secondary);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .detail-item p {
+      background: var(--light);
+      padding: 0.8rem;
+      border-radius: 4px;
+      margin: 0;
+    }
+
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex;
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background: white;
+      color: var(--secondary);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: var(--light);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .charts-section {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3><i class="fas fa-shield-alt"></i> Admin Panel</h3>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="#" class="menu-link active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="#" class="menu-link" data-tab="charts"><i class="fas fa-chart-pie"></i> Grafik & Statistik</a></li>
+        <li><a href="#" class="menu-link" data-tab="aspirations"><i class="fas fa-envelope"></i> Semua Aspirasi</a></li>
+        <li><a href="#" class="menu-link" data-tab="pending"><i class="fas fa-clock"></i> Menunggu</a></li>
+        <li><a href="#" class="menu-link" data-tab="processed"><i class="fas fa-check"></i> Selesai</a></li>
+        <li><a href="#" class="menu-link" data-tab="data-management"><i class="fas fa-database"></i> Kelola Data</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i> Kembali ke Beranda</a></li>
+        <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <h2>Dashboard Aspirasi</h2>
+        <div class="user-info">
+          <div class="user-avatar">A</div>
+          <span>Administrator</span>
+        </div>
+      </header>
+
+      <!-- Dashboard Tab -->
+      <div class="tab-content active" id="dashboard">
+        <!-- Dashboard Cards -->
+        <div class="cards">
+          <div class="card primary">
+            <h3>Total Aspirasi</h3>
+            <p id="totalAspirations">0</p>
+          </div>
+          <div class="card warning">
+            <h3>Menunggu Proses</h3>
+            <p id="pendingAspirations">0</p>
+          </div>
+          <div class="card success">
+            <h3>Sudah Diproses</h3>
+            <p id="processedAspirations">0</p>
+          </div>
+          <div class="card danger">
+            <h3>Hari Ini</h3>
+            <p id="todayAspirations">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Tab -->
+      <div class="tab-content" id="charts">
+        <div class="charts-section">
+          <div class="chart-container">
+            <h3><i class="fas fa-chart-pie"></i> Distribusi Aspirasi per Kategori</h3>
+            <div class="chart-wrapper">
+              <canvas id="categoryPieChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <h3><i class="fas fa-chart-bar"></i> Status Aspirasi per Kategori</h3>
+            <div class="chart-wrapper">
+              <canvas id="statusBarChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <h3><i class="fas fa-chart-line"></i> Trend Aspirasi Mingguan</h3>
+            <div class="chart-wrapper">
+              <canvas id="trendLineChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <h3><i class="fas fa-chart-doughnut"></i> Perbandingan Status</h3>
+            <div class="chart-wrapper">
+              <canvas id="statusDoughnutChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aspirations Tab -->
+      <div class="tab-content" id="aspirations">
+        <div class="table-container">
+          <div class="table-header">
+            <h3>Daftar Aspirasi</h3>
+            <div class="filter-controls">
+              <select id="statusFilter">
+                <option value="all">Semua Status</option>
+                <option value="pending">Menunggu</option>
+                <option value="processed">Sudah Diproses</option>
+              </select>
+              <select id="categoryFilter">
+                <option value="all">Semua Kategori</option>
+                <option value="fasilitas">Fasilitas</option>
+                <option value="akademik">Akademik</option>
+                <option value="ekstrakurikuler">Ekstrakurikuler</option>
+                <option value="kantin">Kantin</option>
+                <option value="kebersihan">Kebersihan</option>
+                <option value="keamanan">Keamanan</option>
+                <option value="lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Kategori</th>
+                <th>Aspirasi</th>
+                <th>Tanggal</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="aspirationsTableBody">
+              <tr>
+                <td colspan="8" style="text-align: center;">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pending Tab -->
+      <div class="tab-content" id="pending">
+        <div class="table-container">
+          <div class="table-header">
+            <h3>Aspirasi Menunggu Proses</h3>
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Kategori</th>
+                <th>Aspirasi</th>
+                <th>Tanggal</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="pendingTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center;">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Processed Tab -->
+      <div class="tab-content" id="processed">
+        <div class="table-container">
+          <div class="table-header">
+            <h3>Aspirasi yang Sudah Diproses</h3>
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Kategori</th>
+                <th>Aspirasi</th>
+                <th>Tanggal</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="processedTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center;">Memuat data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Data Management Tab -->
+      <div class="tab-content" id="data-management">
+        <div class="cards">
+          <div class="card">
+            <h3>Export Data</h3>
+            <p>Unduh semua data aspirasi ke file untuk backup atau pindah device</p>
+            <button class="btn btn-primary" onclick="exportData()">
+              <i class="fas fa-download"></i> Export Data
+            </button>
+          </div>
+          
+          <div class="card">
+            <h3>Import Data</h3>
+            <p>Upload file data aspirasi yang sudah di-export sebelumnya</p>
+            <input type="file" id="importFile" accept=".json" style="margin-bottom: 1rem;">
+            <button class="btn btn-success" onclick="importData()">
+              <i class="fas fa-upload"></i> Import Data
+            </button>
+          </div>
+          
+          <div class="card danger">
+            <h3>Reset Data</h3>
+            <p>Hapus semua data aspirasi (HATI-HATI: Tidak bisa dibatalkan!)</p>
+            <button class="btn btn-danger" onclick="resetAllData()">
+              <i class="fas fa-trash"></i> Reset Semua Data
+            </button>
+          </div>
+        </div>
+        
+        <div class="table-container" style="margin-top: 2rem;">
+          <h3>Informasi Penting</h3>
+          <div style="padding: 1rem; background: #fef3c7; border-radius: 8px; margin-bottom: 1rem;">
+            <h4 style="color: #92400e; margin-bottom: 0.5rem;">
+              <i class="fas fa-exclamation-triangle"></i> Mengapa Data Tidak Sinkron Antar Device?
+            </h4>
+            <p style="color: #92400e; margin: 0;">
+              Website ini menggunakan localStorage browser untuk menyimpan data. Data localStorage hanya tersedia di browser/device yang sama. 
+              Gunakan fitur Export/Import di atas untuk memindahkan data antar device.
+            </p>
+          </div>
+          
+          <div style="padding: 1rem; background: #dbeafe; border-radius: 8px;">
+            <h4 style="color: #1e40af; margin-bottom: 0.5rem;">
+              <i class="fas fa-info-circle"></i> Cara Menggunakan Export/Import:
+            </h4>
+            <ol style="color: #1e40af; margin: 0; padding-left: 1.5rem;">
+              <li>Di device pertama: Klik "Export Data" untuk download file backup</li>
+              <li>Pindahkan file ke device kedua (via email, USB, cloud storage, dll)</li>
+              <li>Di device kedua: Pilih file dan klik "Import Data"</li>
+              <li>Data akan tersinkron dan bisa diakses di device kedua</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal" id="detailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-eye"></i> Detail Aspirasi</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="detailModalBody">
+        <!-- Detail akan dimuat di sini -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let aspirations = [];
+    let filteredAspirations = [];
+    let currentTab = 'dashboard';
+
+    // Chart instances
+    let categoryPieChart, statusBarChart, trendLineChart, statusDoughnutChart;
+
+    // Inisialisasi
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAspirations();
+      setupEventListeners();
+      updateDashboard();
+      initializeCharts();
+    });
+
+    function setupEventListeners() {
+      // Tab navigation
+      document.querySelectorAll('.menu-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const tabId = this.dataset.tab;
+          if (tabId) {
+            switchTab(tabId);
+          }
+        });
+      });
+
+      // Filter
+      document.getElementById('statusFilter').addEventListener('change', filterAspirations);
+      document.getElementById('categoryFilter').addEventListener('change', filterAspirations);
+      
+      // Close modal
+      document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.closest('.modal').style.display = 'none';
+        });
+      });
+      
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Apakah Anda yakin ingin keluar?')) {
+          window.location.href = 'index.html';
+        }
+      });
+      
+      // Close modal ketika klik di luar
+      window.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+          e.target.style.display = 'none';
+        }
+      });
+    }
+
+    function switchTab(tabId) {
+      // Update active menu
+      document.querySelectorAll('.menu-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+
+      // Update active tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(tabId).classList.add('active');
+
+      currentTab = tabId;
+
+      // Load specific tab data
+      if (tabId === 'aspirations') {
+        renderAspirations();
+      } else if (tabId === 'pending') {
+        renderPendingAspirations();
+      } else if (tabId === 'processed') {
+        renderProcessedAspirations();
+      } else if (tabId === 'charts') {
+        updateCharts();
+      }
+    }
+
+    function loadAspirations() {
+      aspirations = JSON.parse(localStorage.getItem('aspirations') || '[]');
+      filteredAspirations = [...aspirations];
+    }
+
+    function updateDashboard() {
+      const total = aspirations.length;
+      const pending = aspirations.filter(a => a.status === 'pending').length;
+      const processed = aspirations.filter(a => a.status === 'processed').length;
+      const today = aspirations.filter(a => a.date === new Date().toISOString().split('T')[0]).length;
+      
+      document.getElementById('totalAspirations').textContent = total;
+      document.getElementById('pendingAspirations').textContent = pending;
+      document.getElementById('processedAspirations').textContent = processed;
+      document.getElementById('todayAspirations').textContent = today;
+    }
+
+    function initializeCharts() {
+      // Category Pie Chart
+      const ctxPie = document.getElementById('categoryPieChart').getContext('2d');
+      categoryPieChart = new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+          labels: [],
+          datasets: [{
+            data: [],
+            backgroundColor: [
+              '#2563eb', '#059669', '#d97706', '#dc2626',
+              '#7c3aed', '#0891b2', '#be123c', '#047857'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+
+      // Status Bar Chart
+      const ctxBar = document.getElementById('statusBarChart').getContext('2d');
+      statusBarChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Menunggu',
+            data: [],
+            backgroundColor: '#d97706'
+          }, {
+            label: 'Selesai',
+            data: [],
+            backgroundColor: '#059669'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Trend Line Chart
+      const ctxLine = document.getElementById('trendLineChart').getContext('2d');
+      trendLineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Aspirasi per Hari',
+            data: [],
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Status Doughnut Chart
+      const ctxDoughnut = document.getElementById('statusDoughnutChart').getContext('2d');
+      statusDoughnutChart = new Chart(ctxDoughnut, {
+        type: 'doughnut',
+        data: {
+          labels: ['Menunggu', 'Selesai'],
+          datasets: [{
+            data: [],
+            backgroundColor: ['#d97706', '#059669']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+
+      updateCharts();
+    }
+
+    function updateCharts() {
+      // Update Category Pie Chart
+      const categoryData = getCategoryStats();
+      categoryPieChart.data.labels = categoryData.labels;
+      categoryPieChart.data.datasets[0].data = categoryData.data;
+      categoryPieChart.update();
+
+      // Update Status Bar Chart
+      const statusData = getStatusByCategoryStats();
+      statusBarChart.data.labels = statusData.labels;
+      statusBarChart.data.datasets[0].data = statusData.pending;
+      statusBarChart.data.datasets[1].data = statusData.processed;
+      statusBarChart.update();
+
+      // Update Trend Line Chart
+      const trendData = getTrendStats();
+      trendLineChart.data.labels = trendData.labels;
+      trendLineChart.data.datasets[0].data = trendData.data;
+      trendLineChart.update();
+
+      // Update Status Doughnut Chart
+      const totalPending = aspirations.filter(a => a.status === 'pending').length;
+      const totalProcessed = aspirations.filter(a => a.status === 'processed').length;
+      statusDoughnutChart.data.datasets[0].data = [totalPending, totalProcessed];
+      statusDoughnutChart.update();
+    }
+
+    function getCategoryStats() {
+      const categories = {};
+      aspirations.forEach(aspiration => {
+        const category = getCategoryName(aspiration.category);
+        categories[category] = (categories[category] || 0) + 1;
+      });
+
+      return {
+        labels: Object.keys(categories),
+        data: Object.values(categories)
+      };
+    }
+
+    function getStatusByCategoryStats() {
+      const categories = ['Fasilitas Sekolah', 'Akademik', 'Ekstrakurikuler', 'Kantin', 'Kebersihan', 'Keamanan', 'Lainnya'];
+      const pending = [];
+      const processed = [];
+
+      categories.forEach(category => {
+        const categoryKey = Object.keys({
+          'Fasilitas Sekolah': 'fasilitas',
+          'Akademik': 'akademik',
+          'Ekstrakurikuler': 'ekstrakurikuler',
+          'Kantin': 'kantin',
+          'Kebersihan': 'kebersihan',
+          'Keamanan': 'keamanan',
+          'Lainnya': 'lainnya'
+        }).find(key => getCategoryName(key.split(': ')[0] || key) === category) || 'lainnya';
+
+        const categoryAspirations = aspirations.filter(a => getCategoryName(a.category) === category);
+        pending.push(categoryAspirations.filter(a => a.status === 'pending').length);
+        processed.push(categoryAspirations.filter(a => a.status === 'processed').length);
+      });
+
+      return {
+        labels: categories,
+        pending: pending,
+        processed: processed
+      };
+    }
+
+    function getTrendStats() {
+      const last7Days = [];
+      const counts = [];
+
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateString = date.toISOString().split('T')[0];
+        
+        last7Days.push(date.toLocaleDateString('id-ID', { month: 'short', day: 'numeric' }));
+        counts.push(aspirations.filter(a => a.date === dateString).length);
+      }
+
+      return {
+        labels: last7Days,
+        data: counts
+      };
+    }
+
+    function filterAspirations() {
+      const statusFilter = document.getElementById('statusFilter').value;
+      const categoryFilter = document.getElementById('categoryFilter').value;
+      
+      filteredAspirations = aspirations.filter(aspiration => {
+        const statusMatch = statusFilter === 'all' || aspiration.status === statusFilter;
+        const categoryMatch = categoryFilter === 'all' || aspiration.category === categoryFilter;
+        return statusMatch && categoryMatch;
+      });
+      
+      renderAspirations();
+    }
+
+    function renderAspirations() {
+      const tbody = document.getElementById('aspirationsTableBody');
+      renderTable(tbody, filteredAspirations);
+    }
+
+    function renderPendingAspirations() {
+      const tbody = document.getElementById('pendingTableBody');
+      const pendingAspirations = aspirations.filter(a => a.status === 'pending');
+      renderTable(tbody, pendingAspirations, false);
+    }
+
+    function renderProcessedAspirations() {
+      const tbody = document.getElementById('processedTableBody');
+      const processedAspirations = aspirations.filter(a => a.status === 'processed');
+      renderTable(tbody, processedAspirations, false);
+    }
+
+    function renderTable(tbody, data, showStatus = true) {
+      tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${showStatus ? '8' : '7'}" style="text-align: center;">Tidak ada data aspirasi</td></tr>`;
+        return;
+      }
+
+      data.forEach((aspiration, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${aspiration.name}</td>
+          <td>${aspiration.class}</td>
+          <td><span class="badge primary">${getCategoryName(aspiration.category)}</span></td>
+          <td>${aspiration.aspiration.substring(0, 50)}...</td>
+          <td>${formatDate(aspiration.date)}</td>
+          ${showStatus ? `<td><span class="badge ${aspiration.status === 'processed' ? 'success' : 'warning'}">
+            ${aspiration.status === 'processed' ? 'Selesai' : 'Menunggu'}
+          </span></td>` : ''}
+          <td>
+            <button class="action-btn btn-primary" onclick="viewDetail(${aspiration.id})">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="action-btn btn-success" onclick="markAsProcessed(${aspiration.id})" 
+              ${aspiration.status === 'processed' ? 'disabled' : ''}>
+              <i class="fas fa-check"></i>
+            </button>
+            <button class="action-btn btn-danger" onclick="deleteAspiration(${aspiration.id})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function viewDetail(id) {
+      const aspiration = aspirations.find(a => a.id === id);
+      if (!aspiration) return;
+      
+      const modalBody = document.getElementById('detailModalBody');
+      modalBody.innerHTML = `
+        <div class="detail-item">
+          <label>Nama:</label>
+          <p>${aspiration.name}</p>
+        </div>
+        <div class="detail-item">
+          <label>Kelas:</label>
+          <p>${aspiration.class}</p>
+        </div>
+        <div class="detail-item">
+          <label>Email:</label>
+          <p>${aspiration.email || 'Tidak disediakan'}</p>
+        </div>
+        <div class="detail-item">
+          <label>Kategori:</label>
+          <p>${getCategoryName(aspiration.category)}</p>
+        </div>
+        <div class="detail-item">
+          <label>Tanggal:</label>
+          <p>${formatDate(aspiration.date)}</p>
+        </div>
+        <div class="detail-item">
+          <label>Status:</label>
+          <p><span class="badge ${aspiration.status === 'processed' ? 'success' : 'warning'}">
+            ${aspiration.status === 'processed' ? 'Sudah Diproses' : 'Menunggu'}
+          </span></p>
+        </div>
+        <div class="detail-item">
+          <label>Aspirasi:</label>
+          <p>${aspiration.aspiration}</p>
+        </div>
+      `;
+      
+      document.getElementById('detailModal').style.display = 'flex';
+    }
+
+    function markAsProcessed(id) {
+      if (confirm('Tandai aspirasi ini sebagai sudah diproses?')) {
+        const aspirationIndex = aspirations.findIndex(a => a.id === id);
+        if (aspirationIndex !== -1) {
+          aspirations[aspirationIndex].status = 'processed';
+          localStorage.setItem('aspirations', JSON.stringify(aspirations));
+          
+          // Immediate update untuk semua statistik
+          loadAspirations();
+          updateDashboard();
+          updateCharts();
+          
+          // Refresh current tab
+          if (currentTab === 'aspirations') {
+            renderAspirations();
+          } else if (currentTab === 'pending') {
+            renderPendingAspirations();
+          } else if (currentTab === 'processed') {
+            renderProcessedAspirations();
+          }
+          
+          // Update counter secara real-time
+          const totalProcessed = aspirations.filter(a => a.status === 'processed').length;
+          const totalPending = aspirations.filter(a => a.status === 'pending').length;
+          
+          alert(`Aspirasi berhasil ditandai sebagai sudah diproses!\n\nUpdate statistik:\n- Total Diproses: ${totalProcessed}\n- Masih Menunggu: ${totalPending}`);
+        }
+      }
+    }
+
+    function deleteAspiration(id) {
+      if (confirm('Apakah Anda yakin ingin menghapus aspirasi ini?')) {
+        aspirations = aspirations.filter(a => a.id !== id);
+        localStorage.setItem('aspirations', JSON.stringify(aspirations));
+        loadAspirations();
+        updateDashboard();
+        updateCharts();
+        
+        // Refresh current tab
+        if (currentTab === 'aspirations') {
+          renderAspirations();
+        } else if (currentTab === 'pending') {
+          renderPendingAspirations();
+        } else if (currentTab === 'processed') {
+          renderProcessedAspirations();
+        }
+        
+        alert('Aspirasi berhasil dihapus!');
+      }
+    }
+
+    function getCategoryName(category) {
+      const categories = {
+        'fasilitas': 'Fasilitas Sekolah',
+        'akademik': 'Akademik',
+        'ekstrakurikuler': 'Ekstrakurikuler',
+        'kantin': 'Kantin',
+        'kebersihan': 'Kebersihan',
+        'keamanan': 'Keamanan',
+        'lainnya': 'Lainnya'
+      };
+      return categories[category] || category;
+    }
+
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('id-ID', options);
+    }
+
+    // Export data function
+    function exportData() {
+      const dataToExport = {
+        aspirations: aspirations,
+        exportDate: new Date().toISOString(),
+        totalCount: aspirations.length
+      };
+      
+      const dataStr = JSON.stringify(dataToExport, null, 2);
+      const dataBlob = new Blob([dataStr], {type: 'application/json'});
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(dataBlob);
+      link.download = `aspirasi-data-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      
+      alert(`Data berhasil di-export! Total: ${aspirations.length} aspirasi`);
+    }
+
+    // Import data function
+    function importData() {
+      const fileInput = document.getElementById('importFile');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        alert('Pilih file untuk di-import terlebih dahulu!');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          
+          if (!importedData.aspirations || !Array.isArray(importedData.aspirations)) {
+            throw new Error('Format file tidak valid');
+          }
+          
+          // Gabungkan data yang ada dengan data import (hindari duplikasi berdasarkan ID)
+          const existingIds = aspirations.map(a => a.id);
+          const newAspirations = importedData.aspirations.filter(a => !existingIds.includes(a.id));
+          
+          aspirations = [...aspirations, ...newAspirations];
+          localStorage.setItem('aspirations', JSON.stringify(aspirations));
+          
+          loadAspirations();
+          updateDashboard();
+          updateCharts();
+          
+          alert(`Import berhasil! Ditambahkan ${newAspirations.length} aspirasi baru. Total: ${aspirations.length} aspirasi`);
+          
+          // Reset file input
+          fileInput.value = '';
+          
+          // Refresh current tab if needed
+          if (currentTab === 'aspirations') {
+            renderAspirations();
+          } else if (currentTab === 'pending') {
+            renderPendingAspirations();
+          } else if (currentTab === 'processed') {
+            renderProcessedAspirations();
+          }
+          
+        } catch (error) {
+          alert('Error importing data: ' + error.message);
+        }
+      };
+      
+      reader.readAsText(file);
+    }
+
+    // Reset all data function
+    function resetAllData() {
+      const confirmation = prompt('Ketik "HAPUS SEMUA" untuk konfirmasi reset data:');
+      
+      if (confirmation === 'HAPUS SEMUA') {
+        localStorage.removeItem('aspirations');
+        aspirations = [];
+        filteredAspirations = [];
+        
+        updateDashboard();
+        updateCharts();
+        
+        // Refresh current tab
+        if (currentTab === 'aspirations') {
+          renderAspirations();
+        } else if (currentTab === 'pending') {
+          renderPendingAspirations();
+        } else if (currentTab === 'processed') {
+          renderProcessedAspirations();
+        }
+        
+        alert('Semua data berhasil dihapus!');
+      } else {
+        alert('Reset dibatalkan. Ketik "HAPUS SEMUA" dengan benar untuk konfirmasi.');
+      }
+    }
+
+    // Auto refresh data setiap 10 detik untuk sinkronisasi yang lebih baik
+    setInterval(() => {
+      loadAspirations();
+      updateDashboard();
+      if (currentTab === 'charts') {
+        updateCharts();
+      }
+      
+      // Refresh tampilan tabel jika sedang di tab yang menampilkan data
+      if (currentTab === 'aspirations') {
+        renderAspirations();
+      } else if (currentTab === 'pending') {
+        renderPendingAspirations();
+      } else if (currentTab === 'processed') {
+        renderProcessedAspirations();
+      }
+    }, 10000);
+
+    // Update data ketika window mendapat focus (admin kembali ke tab)
+    window.addEventListener('focus', function() {
+      loadAspirations();
+      updateDashboard();
+      updateCharts();
+    });
+  </script>
+</body>
+</html>
